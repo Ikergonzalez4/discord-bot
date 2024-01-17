@@ -1,9 +1,9 @@
 // Importar módulos
 const { Client, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
-const { sum, subtract, multiply, divide } = require('./commands/calcs.js');
-const getSubscriberCount = require('./commands/youtube_subs.js');
-const playMusic = require('./commands/music.js');
+const { sum, subtract, multiply, divide } = require('./commands/Math/calcs.js');
+const getSubscriberCount = require('./commands/YouTube/youtube_subs.js');
+const playMusic = require('./commands/Music/music.js');
 const welcome = require('./commands/Welcome/welcome.js');
 const helpCommand = require('./commands/Info/help.js');
 
