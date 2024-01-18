@@ -62,5 +62,40 @@ module.exports = {
           )
       ),
     ];
+
+    const initialMessage = await interaction.reply({
+      embeds: [embed],
+      components: components(false),
+    });
+
+    const filter = (interaction) =>
+      interaction.user.id === interaction.member.id;
+
+    const collelctor = interaction.channel.createMessageComponentCollector({
+      filter,
+      componentType: ComponentType.SelectMenu,
+    });
+
+    collector.on("collect", (interaction) => {
+      const [directory] = interaction.values;
+      const category = categories.find(
+        (x) => x.directory.toLowerCase() === directory
+      );
+
+      const categoryEmbed = new EmbedBuilder()
+        .setTitle(`${formatString(directory)} commands`)
+        .setDescription(`Here are the commands of this category ${directory}`)
+        .addFields(
+          category.commands.map((cmd) => {
+            return {
+              name: `\`${cmd.name}\``,
+              value: cmd.description,
+              inline: true,
+            };
+          })
+        );
+
+      interaction.update({ embeds: [categoryEmbed] });
+    });
   },
 };
