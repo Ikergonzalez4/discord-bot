@@ -1,37 +1,21 @@
-function loadEvents(client) {
-  const ascii = require("ascii-table");
-  const fs = require("fs");
-  const table = new ascii().setHeading("Event", "Status");
+const path = require("path");
+const getAllFiles = require("../utils/getAllFiles");
 
-  const folders = fs.readdirSync("./Events");
-  for (const folder of folders) {
-    const files = fs
-      .readdirSync(`./Events/${folder}`)
-      .filter((file) => file.endsWith(".js"));
+module.exports = (client) => {
+  const eventFolders = getAllFiles(path.join(__dirname, "..", "events"), true);
 
-    for (const file of files) {
-      const event = require(`../Events/${folder}/${file}`);
+  for (const eventFolder of eventFolders) {
+    const eventFiles = getAllFiles(eventFolder);
+    let eventName;
+    eventName = eventFolder.replace(/\\/g, "/").split("/").pop();
 
-      if (event.rest) {
-        if (event.once) {
-          client.rest.once(event.name, (...args) =>
-            event.execute(...args, client)
-          );
-        } else
-          client.rest.on(event.name, (...args) =>
-            event.execute(...args, client)
-          );
-      } else {
-        if (event.once) {
-          client.on(event.name, (...args) => event.execute(...args, client));
-        } else
-          client.on(event.name, (...args) => event.execute(...args, client));
-      }
-        table.addRow(file, "✅");   
-        continue; 
-    }
-  }
-  return console.log(table.toString(), "\nLoaded events");
-}
+    eventName === "validations" ? eventName = "interactionCreate" : eventName;
 
-module.exports = {loadEvents};
+    client.on(eventName, async (arg) => {
+      for (const eventFile of eventFiles) {
+        const eventFunction = require(eventFile);
+        await eventFunction(client, arg);
+      };
+    });
+  };
+};
