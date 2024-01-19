@@ -3,10 +3,10 @@ function loadEvents(client) {
   const fs = require("fs");
   const table = new ascii().setHeading("Event", "Status");
 
-  const folders = fsreaddirSync("../Events");
+  const folders = fs.readdirSync("./Events");
   for (const folder of folders) {
     const files = fs
-      .readdirSync(`../Events/${folder}`)
+      .readdirSync(`./Events/${folder}`)
       .filter((file) => file.endsWith(".js"));
 
     for (const file of files) {
