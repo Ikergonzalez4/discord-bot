@@ -1,16 +1,16 @@
-const { Client, GatewayIntentBits, Partials  } = require ("discord.js");
+const { Client, GatewayIntentBits, Partials } = require("discord.js");
 
 const { User, Message, GuildMember, ThreadMember, Channel } = Partials;
 
-const client = new Client({
-    intents: [ Guilds, GuildMembers, GuildMessages ],
-    partials: [ User, Message, GuildMember, ThreadMember ], 
-});
+const { loadEvents } = require("./Handlers/eventHandler.js");
 
-client.once("ready", () => {
-    console.log(botname + " is online!");
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent],
+    partials: [User, Message, GuildMember, ThreadMember],
 });
 
 client.config = require("./config.json");
 
-client.login(client.config.token);
+client.login(client.config.token).then(() => {
+    loadEvents(client);
+});
