@@ -16,7 +16,7 @@ module.exports = {
       youtube: "📺",
       music: "🎵",
       welcome: "👋",
-      help: "❓",
+      info: "❓",
     };
 
     const directories = [
@@ -96,6 +96,10 @@ module.exports = {
         );
 
       interaction.update({ embeds: [categoryEmbed] });
+    });
+
+    collector.on("end", () => {
+      initialMessage.edit({ components: components(true) });
     });
   },
 };

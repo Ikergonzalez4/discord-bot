@@ -3,7 +3,7 @@ const { AttachmentBuilder } = require("discord.js"); //Importar discord.js
 
 module.exports = (client) => {
   client.on("guildMemberAdd", async (member) => {
-    Canvas.registerFont('./fonts/font.otf', { family: 'Headlines' });    
+    Canvas.registerFont('../../Fonts/font.otf', { family: 'Headlines' });    
     const canal = client.channels.cache.get("1196617110714069032");
     const canvas = Canvas.createCanvas(922, 450);
     const ctx = canvas.getContext("2d");
