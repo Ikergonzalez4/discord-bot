@@ -11,10 +11,18 @@ module.exports = (client) => {
 
     eventName === "validations" ? (eventName = "interactionCreate") : eventName;
 
-    client.on(eventName, async (arg) => {
+    client.on(eventName, async (interaction) => {
+      // Check if the interaction is a slash command interaction
+      if (interaction.isCommand && interaction.isCommand()) {
+        // Check if the user has the 'verified' or 'ADMIN' role
+        if (!interaction.member.roles.cache.some(role => role.name === 'verified' || role.name === 'ADMIN')) {
+          return interaction.reply('You must have the verified role to use commands.');
+        }
+      }
+
       for (const eventFile of eventFiles) {
         const eventFunction = require(eventFile);
-        await eventFunction(client, arg);
+        await eventFunction(client, interaction);
       }
     });
   }
